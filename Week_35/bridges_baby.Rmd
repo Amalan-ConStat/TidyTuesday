@@ -1,12 +1,12 @@
 ---
-title: "week 35 bridges of baltimore"
+title: "Week 35 Bridges of Baltimore"
 author: "M.amalan"
 date: "November 27, 2018"
 output: github_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE,fig.width = 9,fig.height = 7)
+knitr::opts_chunk$set(echo = TRUE,fig.width = 9,fig.height = 7)
 
 library(readr)
 library(tidyverse)

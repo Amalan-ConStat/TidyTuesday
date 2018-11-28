@@ -27,7 +27,7 @@ ggsave(plot_all,width = 10,height = 10,dpi = 300,filename = "Prayer_Regions_all.
 
 Saying Prayer and Regions for people who celebrate Thanksgiving:
 
-If we remove the people who do not celebrate Thanksgiving it is clear that the previous percentages have changed. Further, East South Central, South Atlantic, West South Central percentages have increased to respectively 82.1, 72.9 and 74.1. While East North Central, Middle Atlantic, Mountain and West North Central all have percentages for saying prayer above 60 but less than 70. Finally, regions New England and Pacific have the highest percentages of not saying prayer for Thanksgiving with 54.5 and 46.9. When we remove the people who do not celebrate thanksgiving the people who have not answered which region they are from has decreased to 42.9%. while others two have increased.
+If we remove the people who do not celebrate Thanksgiving it is clear that the previous percentages have changed. Further, East South Central, South Atlantic, West South Central percentages have increased to respectively 82.1, 72.9 and 74.1. While East North Central, Middle Atlantic, Mountain and West North Central all have percentages for saying prayer above 60 but less than 70. Finally, regions New England and Pacific have the highest percentages of not saying prayer for Thanksgiving with 54.5 and 46.9. When we remove the people who do not celebrate thanksgiving the people who have not answered which region they are from has decreased to 42.9%. while other two have increased.
 
 ``` r
 plot_yes<-ggplot(Thanksgiving_Yes,aes(x=str_wrap(us_region,7),fill=prayer))+

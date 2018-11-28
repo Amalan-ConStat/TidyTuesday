@@ -5,7 +5,7 @@ November 13, 2018
 
 Packages : ggplot2, ggrepel, ggthemr TidyTuesday : week 33 Data: malaria\_deaths
 
-Malaria\_deaths\_plot: Plot shows the death rate per 100,000 people in sri lanka decreasing rapidly from 1996 to 2003 with a drop of 0.89 to 0.29, and by 2016 it reaches 0. While in 2015 this rate is 0.13. Highest death rate was in 1990 with 0.91.
+Malaria\_deaths\_plot: Plot shows the death rate per 100,000 people in sri lanka decreasing rapidly from 1996 to 2003 with a drop of 0.89 to 0.24, and by 2016 it reaches 0. While in 2015 this rate is 0.13. Highest death rate was in 1990 with 0.91.
 
 ``` r
 #data subset has been used
@@ -31,7 +31,7 @@ print(Malaria_deaths_plot)
 ggsave(Malaria_deaths_plot,width = 10,height = 10,dpi=300,filename = "Malaria_Deaths_Sri Lanka.png")
 ```
 
-Data: malaria\_deaths\_age Malaria\_deaths\_age\_plot: There are five categories in concern,where age category 15-49 has the most counts of in the range of 45-50. Second category is Under 5 close to 35 counts, while third category is 50-69 inbetween 20-25. It should be noted that this order is for the year 1990. At the end of year 2015 this is not the case, where the categories and counts are 15-49 (close to 10), 50-69 (less than 10), 70 or order(close to 5), under 5(less than 5) and finally 5-14 (close to 0).
+Data: malaria\_deaths\_age Malaria\_deaths\_age\_plot: There are five categories in concern,where age category 15-49 has the most counts of in the range of 45-50. Second category is Under 5 close to 35 counts, while third category is 50-69 inbetween 20-25 from year 1990 to 1993. At the end of year 2015 this is not the case, where the categories and counts are 15-49 (close to 10), 50-69 (less than 10), 70 or order(close to 5), under 5(less than 5) and finally 5-14 (close to 0).
 
 ``` r
 #data subset has been used

@@ -6,16 +6,16 @@ November 27, 2018
 Bridge Data and Baltimore
 =========================
 
-Data on bridges is week 35 for TidyTuesday. Trying to explain the data using is obvious, yet I will use animated jitter plots. There are 13 variables and 2079 observations. Brave choice of limiting my self to less than 10 variables, where latitude, longtitude and Vehicles will not be taken into account.
+Data on bridges is week 35 for TidyTuesday. Trying to explain the data using is obvious, yet I will use animated jitter plots. There are 13 variables and 2079 observations. Brave choice of limiting my self to less than 10 variables, where latitude, longitude and Vehicles will not be taken into account.
 
-So with the help of packages tidyverse, ggthemr, gganimate and readr I will complete this anlysis. Most of the bridges are owned by several agencies, but I will only focus on the top three ownership holders.
+So with the help of packages tidyverse, ggthemr, gganimate,formattable and readr I will complete this analysis. Most of the bridges are owned by several agencies, but I will only focus on the top three ownership holders.
 
 Counties which have bridges owned by State Highway Agency
 ---------------------------------------------------------
 
 Close to 1000 bridges are owned by State Highway Agency, where most of them are in Baltimore County. High amount of bridges are in good condition, further more bridges are in Fair condition and only around 10 bridges in Poor condition.
 
-Considering the Average Daily Traffic only one bridge in Poor condition has the amount of close to 110,000, while all the other poor condition bridges have Average Daily Traffic less than 30,000. While counties Anne Arundel and Harford have no Poor condition bridges at all.
+Considering the Average Daily Traffic only one bridge in Poor condition has the amount of close to 110,000, while all the other poor condition bridges have Average Daily Traffic less than 30,000. While counties Anne Arundel and Hartford have no Poor condition bridges at all.
 
 Most of the bridges are from Baltimore County and around 20 bridges have more than 150,000 Average Daily Traffic for both Fair and Good conditions. Hartford and Carroll Counties have their Average Daily Traffic which does not exceed 80,000 at any condition of the bridge.
 
@@ -24,7 +24,7 @@ Most of the bridges are from Baltimore County and around 20 bridges have more th
 Counties which have bridges owned by County Highway Agency
 ----------------------------------------------------------
 
-County Highway Agency owns the second most amount of bridges in this dataset. Therefore using we are going to check how the condition of the bridge and counties are explained is the simplest manner.
+County Highway Agency owns the second most amount of bridges in this data-set. Therefore using we are going to check how the condition of the bridge and counties are explained is the simplest manner.
 
 Less amount of poor condition bridges in all counties except Anne Arundel County. All bridges owned by County Highway Agency have a limited Average Daily Traffic less than 50,000. Clearly we have More fair bridges than good ones. In the poor condition category only two have Average Daily Traffic more than 20,000, while other two have more than 10 bridges.
 
@@ -46,7 +46,7 @@ The highest Average Daily Traffic is close to 170,000 which are only 4 and in Go
 Most amount of bridges Built based on Year
 ------------------------------------------
 
-Years 1957, 1970, 1975, 1991, 1963 and 1961 have the top 6 spots of for building more than 50 bridges in those years. If we consider the conditions of Fair and Good only the year 1991 is suitable to mention, while all other years has atleast one Poor condition bridge. Further There are more Poor condition bridges in 1961 than in 1957. While all Poor condition bridges has Average Daily Traffic less than 50,000.
+Years 1957, 1970, 1975, 1991, 1963 and 1961 have the top 6 spots of for building more than 50 bridges in those years. If we consider the conditions of Fair and Good only the year 1991 is suitable to mention, while all other years has at-least one Poor condition bridge. Further There are more Poor condition bridges in 1961 than in 1957. While all Poor condition bridges has Average Daily Traffic less than 50,000.
 
 Finally, there are only a few bridges which have Average Daily Traffic above 100,000 and only 3 are in Good condition. There are Bridges which can have Average Daily Traffic close to zero in all 6 years.
 
@@ -55,11 +55,11 @@ Finally, there are only a few bridges which have Average Daily Traffic above 100
 Average Traffic Less than or equal to 100,000 for Counties with Bridge Condition
 --------------------------------------------------------------------------------
 
-While obtaining summary for county variable there is one issue because there are two observations which say "Baltimore city" than "Baltimore City" and I dont want to change them.
+While obtaining summary for county variable there is one issue because there are two observations which say "Baltimore city" than "Baltimore City" and I don't want to change them.
 
-If we focus of Average Daily Traffic less than or equal to 100,000 based on County and Condition. It is clear that Poor condition bridges are part of this criteria and mostly Average Daily Traffic is less than 5000 for Counties Howard, Hartford and Carroll. WHile Baltimore County has highest amount upto 75,000, but Baltimore County has highest amount close to 40,000. Finally Anne Arundel County has only one Poor condition bridge which has Average Daily Traffic Close to zero.
+If we focus of Average Daily Traffic less than or equal to 100,000 based on County and Condition. It is clear that Poor condition bridges are part of this criteria and mostly Average Daily Traffic is less than 5000 for Counties Howard, Hartford and Carroll. While Baltimore County has highest amount up-to 75,000, but Baltimore County has highest amount close to 40,000. Finally Anne Arundel County has only one Poor condition bridge which has Average Daily Traffic Close to zero.
 
-We can see that there are more Fair Condition bridges than Good ones. In Baltimore County most of the Fair condition bridges have Average Daily Traffic less than 15000. Similary Carroll county and Hartford county also behave similarly. But for Good condition bridges this is not the case where there is no certain strong dense region as similar to Fair condition bridges.
+We can see that there are more Fair Condition bridges than Good ones. In Baltimore County most of the Fair condition bridges have Average Daily Traffic less than 15000. Similarly Carroll county and Hartford county also behave similarly. But for Good condition bridges this is not the case where there is no certain strong dense region as similar to Fair condition bridges.
 
 Previously when we looked into Ownership we did not see Baltimore City as a factor, but here that is not the case.
 
@@ -245,9 +245,9 @@ Good
 </tr>
 </tbody>
 </table>
-When I did try to plot the top ten bridges with most Total improvement there was one issue, which is the distance between first two values and the next 8 values. Therfore I divided the table into to.
+When I did try to plot the top ten bridges with most Total improvement there was one issue, which is the distance between first two values and the next 8 values. Therefore I divided the table into to.
 
-In this second table We can see there are two bridges which are from Balitmore City and are built in 1980 and 1971, but the amount spent on Total Improvement is 300,000,000. But there Average Daily Traffic is respectively 56280 and 30600.
+In this second table We can see there are two bridges which are from Baltimore City and are built in 1980 and 1971, but the amount spent on Total Improvement is 300,000,000. But there Average Daily Traffic is respectively 56280 and 30600.
 
 While we have another bridge from Baltimore City and built in 1907, but Total Improvement amount is 35,026,000. But the Average Daily Traffic is 3,900,000.
 

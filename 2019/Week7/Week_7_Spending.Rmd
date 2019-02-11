@@ -46,7 +46,7 @@ You can obtain the data from [here.](https://github.com/rfordatascience/tidytues
 It should be noted that I am not going to rename the abbreviation of departments
 with their full names, so below is a screen shot which would come in handy.
 
-![Department Full Names with Abbreviations](department.jpg)
+![](department.jpg)
 
 # Climate Change Research 
 

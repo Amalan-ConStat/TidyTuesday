@@ -32,7 +32,7 @@ Oddly though climate data-set did not have year values, I checked the downloaded
 
 You can obtain the data from [here.](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-02-12) It should be noted that I am not going to rename the abbreviation of departments with their full names, so below is a screen shot which would come in handy.
 
-![Department Full Names with Abbreviations](department.jpg)
+![](department.jpg)
 
 Climate Change Research
 =======================

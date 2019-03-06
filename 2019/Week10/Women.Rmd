@@ -1,0 +1,259 @@
+---
+title: 'Week 10 : Women in Industry'
+author: "M.Amalan"
+date: "March 5, 2019"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,warning = FALSE,message = FALSE,fig.width = 14,fig.height = 14)
+```
+
+
+```{r load the data and packages}
+#load the packages
+library(tidyverse)
+library(gganimate)
+library(readr)
+library(ggthemr)
+
+# load the theme
+ggthemr("fresh")
+
+# load the data
+earnings_female <- read_csv("earnings_female.csv")
+employed_gender <- read_csv("employed_gender.csv")
+jobs_gender <- read_csv("jobs_gender.csv")
+```
+
+# Earnings Female
+
+## All other age groups
+
+```{r except total}
+average<-earnings_female %>%
+         filter(group=="Total, 16 years and older") %>%
+         mutate(year=cut(Year,breaks = c(1978,1989,1999,2011),
+                  labels =c("1980s","1990s","2000s") ) ) %>%
+        group_by(year) %>%
+        summarize(Mean=mean(percent))
+
+earnings_female %>%
+  filter(group!="Total, 16 years and older") %>%
+ggplot(.,aes(Year,percent,color=group))+
+  geom_point()+geom_line()+
+  theme(legend.position = "bottom")+
+  geom_hline(yintercept = average$Mean,color=c("red","maroon","brown"),size=1.2)+
+  annotate("text",x=2010,y=68,label="1980s Average")+
+  annotate("text",x=1983,y=76,label="1990s Average")+
+  annotate("text",x=2008,y=80.5,label="2000s Average")
+```
+
+# Employed Gender
+
+## Comparing Full Time with Part Time
+
+```{r total full and part}
+employed_gender %>%
+  select(year,total_full_time,total_part_time) %>%
+  gather(Type,percent,c(total_full_time,total_part_time)) %>%
+ggplot(.,aes(year,percent,fill=Type,label=round(percent)))+
+  geom_col()+theme(legend.position = "bottom")+
+  geom_text(nudge_y = -.75,color="white")+xlab("Year")+
+  ylab("Percentage")+
+  ggtitle("Total Work Force Full Time and Part Time")
+  
+```
+
+## Male Occupants with Full Time and Part Time Work
+
+```{r male full and part}
+employed_gender %>%
+  select(year,full_time_male,part_time_male) %>%
+  gather(Type,percent,c(full_time_male,part_time_male)) %>%
+ggplot(.,aes(year,percent,fill=Type,label=round(percent)))+
+  geom_col()+theme(legend.position = "bottom")+
+  geom_text(nudge_y = -.75,color="white")+xlab("Year")+
+  ylab("Percentage")+
+  ggtitle("Male Work Force Full Time and Part Time")
+```
+
+## Female Occupants with Full Time and Part Time Work
+
+```{r female full and part}
+employed_gender %>%
+  select(year,full_time_female,part_time_female) %>%
+  gather(Type,percent,c(full_time_female,part_time_female)) %>%
+ggplot(.,aes(year,percent,fill=Type,label=round(percent)))+
+  geom_col()+theme(legend.position = "bottom")+
+  geom_text(nudge_y = -.75,color="white")+xlab("Year")+
+  ylab("Percentage")+
+  ggtitle("Female Work Force Full Time and Part Time")
+```
+
+# Jobs Gender
+
+
+## Major Category
+
+### Major Category and Total Workers
+
+```{r major category total workers}
+jg_avg<-jobs_gender %>%
+        select(-one_of(c("occupation","minor_category"))) %>%
+        group_by(year,major_category) %>%
+        group_by(year) %>%
+        summarize_if(is.numeric,funs(mean),na.rm=TRUE)
+
+p<-jobs_gender %>%
+     select(-one_of(c("occupation","minor_category"))) %>%
+     group_by(year,major_category) %>%
+     summarise_all(funs(mean),na.rm=TRUE) %>%
+ggplot(.,aes(str_wrap(major_category,12),total_workers,label=round(total_workers,2)))+
+  geom_col()+transition_time(year)+ease_aes("linear")+  
+  ggtitle("Total Workers changing Over time",subtitle = "Year :{frame_time}")+
+  xlab("Major Category")+ylab("Total Workers")+geom_text(vjust=-1)
+
+animate(p,nframes=4,fps=1)
+```
+
+### Major Category and Male Workers
+
+```{r major category male workers}
+p<-jobs_gender %>%
+     select(-one_of(c("occupation","minor_category"))) %>%
+     group_by(year,major_category) %>%
+     summarise_all(funs(mean),na.rm=TRUE) %>%
+ggplot(.,aes(str_wrap(major_category,12),workers_male,label=round(workers_male,2)))+
+  geom_col()+transition_time(year)+ease_aes("linear")+  
+  ggtitle("Male Workers changing Over time",subtitle = "Year :{frame_time}")+
+  xlab("Major Category")+ylab("Male Workers")+geom_text(vjust=-1)
+
+animate(p,nframes=4,fps=1)
+```
+
+### Major Category and Female Workers
+
+```{r major category female workers}
+p<-jobs_gender %>%
+     select(-one_of(c("occupation","minor_category"))) %>%
+     group_by(year,major_category) %>%
+     summarise_all(funs(mean),na.rm=TRUE) %>%
+ggplot(.,aes(str_wrap(major_category,12),workers_female,label=round(workers_female,2)))+
+  geom_col()+transition_time(year)+ease_aes("linear")+  
+  ggtitle("Female Workers changing Over time",subtitle = "Year :{frame_time}")+
+  xlab("Major Category")+ylab("Female Workers")+geom_text(vjust=-1)
+
+animate(p,nframes=4,fps=1)
+```
+
+### Major Category and Total Earnings Male Wage 
+
+```{r major category earnings male}
+p<-jobs_gender %>%
+     select(-one_of(c("occupation","minor_category"))) %>%
+     group_by(year,major_category) %>%
+     summarise_all(funs(mean),na.rm=TRUE) %>%
+ggplot(.,aes(str_wrap(major_category,12),total_earnings_male,label=round(total_earnings_male,2)))+
+  geom_col()+transition_time(year)+ease_aes("linear") +
+  ggtitle("Total Earnings Male Wage changing Over time",subtitle = "Year :{frame_time}")+
+  xlab("Major Category")+ylab("Total Earnings Male")+geom_text(vjust=-1)
+
+animate(p,nframes=4,fps=1)
+```
+
+### Major Category and Total Earnings Female Wage 
+
+```{r major category earnings female}
+p<-jobs_gender %>%
+     select(-one_of(c("occupation","minor_category"))) %>%
+     group_by(year,major_category) %>%
+     summarise_all(funs(mean),na.rm=TRUE) %>%
+ggplot(.,aes(str_wrap(major_category,12),total_earnings_female,label=round(total_earnings_female)))+
+  geom_col()+transition_time(year)+ease_aes("linear")+
+  ggtitle("Total Earnings Female Wage changing Over time",subtitle = "Year :{frame_time}")+
+  xlab("Major Category")+ylab("Total Earnings Female")+geom_text(vjust=-1)
+
+animate(p,nframes=4,fps=1)
+```
+
+## Minor Category
+
+### Minor Category and Total Workers
+
+```{r minor category total workers}
+p<-jobs_gender %>%
+     select(-one_of(c("occupation","major_category"))) %>%
+     group_by(year,minor_category) %>%
+     summarise_all(funs(mean),na.rm=TRUE) %>%
+ggplot(.,aes(str_wrap(minor_category,20),total_workers,label=round(total_workers,2)))+
+  geom_col()+transition_time(year)+ease_aes("linear")+coord_flip()+
+  ggtitle("Total Workers changing Over time",subtitle = "Year :{frame_time}")+
+  xlab("Minor Category")+ylab("Total Workers")+geom_text(hjust="inward")
+
+animate(p,nframes=4,fps=1)
+```
+
+### Minor Category and Male Workers
+
+```{r minor category male workers}
+p<-jobs_gender %>%
+     select(-one_of(c("occupation","major_category"))) %>%
+     group_by(year,minor_category) %>%
+     summarise_all(funs(mean),na.rm=TRUE) %>%
+ggplot(.,aes(str_wrap(minor_category,20),workers_male,label=round(workers_male,2)))+
+  geom_col()+transition_time(year)+ease_aes("linear")+coord_flip()+
+  ggtitle("Male Workers changing Over time",subtitle = "Year :{frame_time}")+
+  xlab("Minor Category")+ylab("Male Workers")+geom_text(hjust="inward")
+
+animate(p,nframes=4,fps=1)
+```
+
+### Minor Category and Female Workers
+
+
+```{r minor category female workers}
+p<-jobs_gender %>%
+     select(-one_of(c("occupation","major_category"))) %>%
+     group_by(year,minor_category) %>%
+     summarise_all(funs(mean),na.rm=TRUE) %>%
+ggplot(.,aes(str_wrap(minor_category,20),workers_female,label=round(workers_female,2)))+
+  geom_col()+transition_time(year)+ease_aes("linear")+coord_flip()+
+  ggtitle("Female Workers changing Over time",subtitle = "Year :{frame_time}")+
+  xlab("Minor Category")+ylab("Female Workers")+geom_text(hjust="inward")
+
+animate(p,nframes=4,fps=1)
+```
+
+### Minor Category and Total Earnings Male Wage 
+
+
+```{r minor category total earnings male wage}
+p<-jobs_gender %>%
+     select(-one_of(c("occupation","major_category"))) %>%
+     group_by(year,minor_category) %>%
+     summarise_all(funs(mean),na.rm=TRUE) %>%
+ggplot(.,aes(str_wrap(minor_category,20),total_earnings_male,label=round(total_earnings_male,2)))+
+  geom_col()+transition_time(year)+ease_aes("linear")+coord_flip()+
+  ggtitle("Total Earnings Male Wage changing Over time",subtitle = "Year :{frame_time}")+
+  xlab("Minor Category")+ylab("Total earnings Male")+geom_text(hjust="inward")
+
+animate(p,nframes=4,fps=1)
+```
+
+### Minor Category and Total Earnings Female Wage
+
+```{r minor category total earnings female wage}
+p<-jobs_gender %>%
+     select(-one_of(c("occupation","major_category"))) %>%
+     group_by(year,minor_category) %>%
+     summarise_all(funs(mean),na.rm=TRUE) %>%
+ggplot(.,aes(str_wrap(minor_category,20),total_earnings_female,label=round(total_earnings_female,2)))+
+  geom_col()+transition_time(year)+ease_aes("linear")+coord_flip()+
+  ggtitle("Total Earnings Female Wage changing Over time",subtitle = "Year :{frame_time}")+
+  xlab("Minor Category")+ylab("Total earnings Female")+geom_text(hjust="inward")
+
+animate(p,nframes=4,fps=1)
+```
+
+*THANK YOU*

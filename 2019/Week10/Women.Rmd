@@ -1,5 +1,5 @@
 ---
-title: 'Week 10 : Women in Industry'
+title: 'Week 10 : Women in Workforce'
 author: "M.Amalan"
 date: "March 5, 2019"
 output: github_document
@@ -177,6 +177,24 @@ ggplot(.,aes(str_wrap(major_category,12),total_earnings_female,label=round(total
 animate(p,nframes=4,fps=1)
 ```
 
+### Major Category and Wage Percent for Female relative to Male
+
+```{r major category and wage percent for Female relative to Male}
+p<-jobs_gender %>%
+     select(-one_of(c("occupation","minor_category"))) %>%
+     group_by(year,major_category) %>%
+     summarise_all(funs(mean),na.rm=TRUE) %>%
+ggplot(.,aes(str_wrap(major_category,12),wage_percent_of_male,
+             label=round(wage_percent_of_male,2)))+
+  geom_col()+transition_time(year)+ease_aes("linear")+
+  ggtitle("Wage Percent of Female relative to Male changing Over time",
+          subtitle = "Year :{frame_time}")+
+  xlab("Major Category")+ylab("Relative Percentage")+geom_text(vjust=-1)
+
+animate(p,nframes=4,fps=1)
+```
+
+
 ## Minor Category
 
 ### Minor Category and Total Workers
@@ -252,6 +270,23 @@ ggplot(.,aes(str_wrap(minor_category,20),total_earnings_female,label=round(total
   geom_col()+transition_time(year)+ease_aes("linear")+coord_flip()+
   ggtitle("Total Earnings Female Wage changing Over time",subtitle = "Year :{frame_time}")+
   xlab("Minor Category")+ylab("Total earnings Female")+geom_text(hjust="inward")
+
+animate(p,nframes=4,fps=1)
+```
+
+### Minor Category and Wage Percent for Female relative to Male
+
+```{r minor category and wage percent for Female relative to Male}
+p<-jobs_gender %>%
+     select(-one_of(c("occupation","major_category"))) %>%
+     group_by(year,minor_category) %>%
+     summarise_all(funs(mean),na.rm=TRUE) %>%
+ggplot(.,aes(str_wrap(minor_category,18),wage_percent_of_male,
+             label=round(wage_percent_of_male,2)))+
+  geom_col()+transition_time(year)+ease_aes("linear")+
+  ggtitle("Wage Percent of Female relative to Male changing Over time",
+          subtitle = "Year :{frame_time}")+coord_flip()+
+  xlab("Minor Category")+ylab("Relative Percentage")+geom_text(hjust=1)
 
 animate(p,nframes=4,fps=1)
 ```

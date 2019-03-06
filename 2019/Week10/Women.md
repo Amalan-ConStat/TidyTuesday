@@ -1,4 +1,4 @@
-Week 10 : Women in Industry
+Week 10 : Women in Workforce
 ================
 M.Amalan
 March 5, 2019
@@ -194,6 +194,25 @@ animate(p,nframes=4,fps=1)
 
 ![](Women_files/figure-markdown_github/major%20category%20earnings%20female-1.gif)
 
+### Major Category and Wage Percent for Female relative to Male
+
+``` r
+p<-jobs_gender %>%
+     select(-one_of(c("occupation","minor_category"))) %>%
+     group_by(year,major_category) %>%
+     summarise_all(funs(mean),na.rm=TRUE) %>%
+ggplot(.,aes(str_wrap(major_category,12),wage_percent_of_male,
+             label=round(wage_percent_of_male,2)))+
+  geom_col()+transition_time(year)+ease_aes("linear")+
+  ggtitle("Wage Percent of Female relative to Male changing Over time",
+          subtitle = "Year :{frame_time}")+
+  xlab("Major Category")+ylab("Relative Percentage")+geom_text(vjust=-1)
+
+animate(p,nframes=4,fps=1)
+```
+
+![](Women_files/figure-markdown_github/major%20category%20and%20wage%20percent%20for%20Female%20relative%20to%20Male-1.gif)
+
 Minor Category
 --------------
 
@@ -281,5 +300,24 @@ animate(p,nframes=4,fps=1)
 ```
 
 ![](Women_files/figure-markdown_github/minor%20category%20total%20earnings%20female%20wage-1.gif)
+
+### Minor Category and Wage Percent for Female relative to Male
+
+``` r
+p<-jobs_gender %>%
+     select(-one_of(c("occupation","major_category"))) %>%
+     group_by(year,minor_category) %>%
+     summarise_all(funs(mean),na.rm=TRUE) %>%
+ggplot(.,aes(str_wrap(minor_category,18),wage_percent_of_male,
+             label=round(wage_percent_of_male,2)))+
+  geom_col()+transition_time(year)+ease_aes("linear")+
+  ggtitle("Wage Percent of Female relative to Male changing Over time",
+          subtitle = "Year :{frame_time}")+coord_flip()+
+  xlab("Minor Category")+ylab("Relative Percentage")+geom_text(hjust=1)
+
+animate(p,nframes=4,fps=1)
+```
+
+![](Women_files/figure-markdown_github/minor%20category%20and%20wage%20percent%20for%20Female%20relative%20to%20Male-1.gif)
 
 *THANK YOU*

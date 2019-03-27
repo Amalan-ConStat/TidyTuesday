@@ -1,0 +1,282 @@
+---
+title: "Pets in Seattle"
+author: "M.Amalan"
+date: "March 26, 2019"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message = FALSE,warning=FALSE,fig.width = 13,fig.height = 13)
+```
+
+```{r load the data and packages}
+library(readr)
+library(tidyverse)
+library(gganimate)
+library(splitstackshape)
+library(forcats)
+library(ggthemr)
+
+ggthemr("flat dark")
+seattle_pets <- read_csv("seattle_pets.csv")
+```
+
+# Yearly Change 
+
+## Zipcode Counts Over the Years
+
+```{r ZC with Years}
+p<-seattle_pets %>%
+   cSplit("license_issue_date",sep = " ") %>%
+   rename(Month =license_issue_date_1) %>%
+   rename(Day = license_issue_date_2) %>%
+   rename(Year = license_issue_date_3) %>%
+   select(zip_code,Year) %>%
+   group_by(Year) %>%
+   count(zip_code) %>%
+   remove_missing() %>%
+   subset(Year >=2010) %>%
+   top_n(25) %>%
+ggplot(.,aes(x= fct_infreq(zip_code),y=n,fill=factor(Year)))+
+  geom_col()+transition_time(Year)+ease_aes("linear") +
+  coord_flip()+xlab("Zip code")+ylab(" Count")+
+  labs(fill="Year")+
+  scale_y_continuous(breaks=seq(0,3000,250),labels = seq(0,3000,250))+
+  ggtitle("Zip Code Over the Years",subtitle="Year : {frame_time}")
+
+animate(p,fps=1,nframes=7)
+```
+
+## Species Counts Over the Years
+
+```{r Species with Years}
+seattle_pets %>%
+   cSplit("license_issue_date",sep = " ") %>%
+   rename(Month =license_issue_date_1) %>%
+   rename(Day = license_issue_date_2) %>%
+   rename(Year = license_issue_date_3) %>%
+   select(species,Year) %>%
+   subset(Year >=2016) %>%
+   group_by(Year) %>%
+   count(species) %>%
+ggplot(.,aes(x= species,y=n,fill=factor(Year),label=n))+
+  geom_col()+geom_text()+
+  transition_states(Year,transition_length = 2,state_length = 2)+
+  enter_fade()+exit_shrink()+ease_aes("back-in")+
+  xlab("Species")+ylab("Count")+ labs(fill="Year")+
+  scale_y_continuous(breaks=seq(0,23000,1000),labels=seq(0,23000,1000))+
+  ggtitle("Species Over the Years",subtitle = "Year: {closest_state}")
+```
+
+## Primary Breed Over the Years
+
+```{r Primary Breed with Years}
+p<-seattle_pets %>%
+   cSplit("license_issue_date",sep = " ") %>%
+   rename(Month =license_issue_date_1) %>%
+   rename(Day = license_issue_date_2) %>%
+   rename(Year = license_issue_date_3) %>%
+   select(primary_breed,Year) %>%
+   group_by(Year) %>%
+   count(primary_breed) %>%
+   remove_missing() %>%
+   subset(Year >=2010) %>%
+   top_n(15) %>%
+ggplot(.,aes(x= str_wrap(primary_breed,20),y=n,label=n,fill=factor(Year)))+
+  geom_col()+transition_time(Year)+ease_aes("linear") +
+  coord_flip()+geom_text()+labs(fill="Year")+
+  xlab("Primary Breed")+ylab("Count")+
+  scale_y_continuous(breaks=seq(0,6000,500),labels=seq(0,6000,500))+
+  ggtitle("Primary Breed Over the Years",subtitle = "Year : {frame_time}")
+
+animate(p,fps=1,nframes=8)
+```
+
+## Animals Name Over the Years
+
+```{r Names with Years}
+p<-seattle_pets %>%
+   cSplit("license_issue_date",sep = " ") %>%
+   rename(Month =license_issue_date_1) %>%
+   rename(Day = license_issue_date_2) %>%
+   rename(Year = license_issue_date_3) %>%
+   select(animals_name,Year) %>%
+   group_by(Year) %>%
+   count(animals_name) %>%
+   remove_missing() %>%
+   subset(Year >=2010) %>%
+   top_n(5) %>%
+ggplot(.,aes(x= fct_infreq(animals_name),y=n,fill=factor(Year),label=n))+
+  geom_col()+transition_time(Year)+ease_aes("linear") +
+  coord_flip()+geom_text()+labs(fill="Year")+
+  xlab("Animals Name")+ylab("Count")+
+  scale_y_continuous(breaks = seq(0,275,25),labels=seq(0,275,25))+
+  ggtitle("Animales N ame Over the Years",
+          subtitle = "Year : {frame_time}")
+
+animate(p,fps=1,nframes=8)
+```
+
+# ZipCode and Choices
+
+## Zipcode with choices of Species
+
+```{r ZC with Species 1}
+p<-seattle_pets %>%
+   cSplit("license_issue_date",sep = " ") %>%
+   rename(Month =license_issue_date_1) %>%
+   rename(Day = license_issue_date_2) %>%
+   rename(Year = license_issue_date_3) %>%
+   select(zip_code,species,Year,Month) %>%
+   mutate(Month = as.integer(Month)) %>%
+   cSplit("zip_code",sep = "-") %>%
+   remove_missing() %>%
+   unite("zip_code",c("zip_code_1","zip_code_2")) %>%
+ggplot(.,aes(x=factor(Month),y=factor(zip_code),
+             shape=species,color=factor(Year)))+geom_jitter()+
+      transition_time(Year)+ ease_aes("linear")+
+      ggtitle("Zipcode vs Species of Choice ",
+              subtitle = "Year : {frame_time}")+
+      shadow_mark()+xlab("Month")+ylab("Zip Code")+
+      labs(color="Year",shape="Species")
+      
+animate(p,nframes=4,fps=1)
+```
+
+```{r ZC with Species top 10}
+a<-seattle_pets %>%
+   count(zip_code) %>%
+   top_n(10)
+
+seattle_pets %>%
+   cSplit("license_issue_date",sep = " ") %>%
+   rename(Month =license_issue_date_1) %>%
+   rename(Day = license_issue_date_2) %>%
+   rename(Year = license_issue_date_3) %>%
+   select(zip_code,species,Year,Month) %>%
+   mutate(Month = as.integer(Month)) %>%
+   subset(zip_code %in% c(a$zip_code)) %>%
+ggplot(.,aes(x=species,y=zip_code,color=Month))+geom_jitter()+
+      transition_states(Year,transition_length = 2,state_length = 3)+
+      enter_fade()+exit_shrink()+ease_aes("back-in")+
+      xlab("Species")+ylab("Zip Code")+
+      ggtitle("Top 10 Zipcodes vs Species of Choice ",
+              subtitle = "Year : {closest_state}")
+      
+```
+
+
+## Zipcode with choices of Primary Breed
+
+```{r ZC with Primary Breed top 10}
+b<-seattle_pets %>%
+   count(primary_breed) %>%
+   top_n(10)
+
+seattle_pets %>%
+   cSplit("license_issue_date",sep = " ") %>%
+   rename(Month =license_issue_date_1) %>%
+   rename(Day = license_issue_date_2) %>%
+   rename(Year = license_issue_date_3) %>%
+   select(zip_code,primary_breed,Year,Month) %>%
+   mutate(Month = as.integer(Month)) %>%
+   subset(zip_code %in% c(a$zip_code)) %>%
+   subset(primary_breed %in% c(b$primary_breed)) %>%
+ggplot(.,aes(x=str_wrap(primary_breed,10),y=zip_code,color=Month))+
+      geom_jitter()+
+      transition_states(Year,transition_length = 2,state_length = 3)+
+      enter_fade()+exit_shrink()+ease_aes("back-in")+
+      xlab("Primary Breed")+ylab("Zip Code")+
+      ggtitle("Top 10 Zipcode and Primary Breed of Choice ",
+              subtitle = "Year : {closest_state}")
+      
+```
+
+
+## Zipcode with choices of Animals Name
+
+```{r ZC with Animals Name top 10}
+d<-seattle_pets %>%
+   count(animals_name) %>%
+   top_n(10)
+
+e<-seattle_pets %>%
+   count(zip_code) %>%
+   top_n(15)
+
+seattle_pets %>%
+   cSplit("license_issue_date",sep = " ") %>%
+   rename(Month =license_issue_date_1) %>%
+   rename(Day = license_issue_date_2) %>%
+   rename(Year = license_issue_date_3) %>%
+   select(zip_code,animals_name,Year,Month) %>%
+   mutate(Month = as.integer(Month)) %>%
+   subset(zip_code %in% c(e$zip_code)) %>%
+   subset(animals_name %in% c(d$animals_name)) %>%
+ggplot(.,aes(x=animals_name,y=zip_code,color=Month))+geom_jitter()+
+      transition_states(Year,transition_length = 2,state_length = 3)+
+      enter_fade()+exit_shrink()+ease_aes("back-in")+
+      xlab("Animals Name")+ylab("Zip Code")+
+      ggtitle("Top 10 Zipcode and Top 15 Animals Name of Choice ",
+              subtitle = "Year : {closest_state}")
+      
+```
+
+# Primary and Secondary Breed Choices Over the Years
+
+```{r Primary and Secondary Breed}
+a<-seattle_pets %>%
+   count(primary_breed) %>%
+   top_n(10)
+
+b<-seattle_pets %>%
+   count(secondary_breed) %>%
+   top_n(10)
+
+seattle_pets %>%
+   cSplit("license_issue_date",sep = " ") %>%
+   rename(Month =license_issue_date_1) %>%
+   rename(Day = license_issue_date_2) %>%
+   rename(Year = license_issue_date_3) %>%
+   select(primary_breed,secondary_breed,Year,Month) %>%
+   remove_missing() %>%
+   mutate(Month = as.integer(Month)) %>%
+   subset(primary_breed %in% c(a$primary_breed)) %>%
+   subset(secondary_breed %in% c(b$secondary_breed)) %>%
+ggplot(.,aes(x=str_wrap(primary_breed,12),y=str_wrap(secondary_breed,12),
+             color=Month))+
+      geom_jitter()+xlab("Primary Breed")+ylab("Second Breed")+
+      transition_states(Year,transition_length = 2,state_length = 3)+
+      enter_fade() + exit_shrink() +ease_aes("back-in")+
+      #theme(axis.text.x = element_text(angle = 270))+
+      ggtitle("Top 10 Primary and Secondary Breeds", 
+              subtitle = "Year : {closest_state}")
+```
+
+
+# Species and Name choices for Animals
+
+```{r Species and Name Choices}
+b<-seattle_pets %>%
+   count(animals_name) %>%
+   top_n(15)
+
+seattle_pets %>%
+   cSplit("license_issue_date",sep = " ") %>%
+   rename(Month =license_issue_date_1) %>%
+   rename(Day = license_issue_date_2) %>%
+   rename(Year = license_issue_date_3) %>%
+   select(species,animals_name,Year,Month) %>%
+   remove_missing() %>%
+   mutate(Month = as.integer(Month)) %>%
+   subset(animals_name %in% c(b$animals_name)) %>%
+ggplot(.,aes(y=animals_name,x=species,color=Month))+geom_jitter()+
+      transition_states(Year,transition_length = 2,state_length = 3)+
+      enter_fade() + exit_shrink() +ease_aes("back-in")+
+      ylab("Animals Name")+xlab("Species")+
+      ggtitle("Animals Name and Species", 
+              subtitle = "Year : {closest_state}")
+```
+
+
+*THANK YOU*
